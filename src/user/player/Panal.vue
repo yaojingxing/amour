@@ -1,12 +1,16 @@
 <template>
     <div class="panel">
-        <div class="progress-bar">
+        <div class="progress-bar" @click="changePlayTime($event)" ref="progressBar">
             <div class="progress-subbar" draggable="true" :style="{width:width0}">
 
             </div>
             <span></span>
         </div>
         <div class="control">
+            <div class="control-status" @click="playStatusHandler">
+                <img :src="statusIcon" class="before" >
+            </div>
+
             <img src="@/assets/svg/next.svg" class="before" @click="presong">
 
             <div class="pause" >
@@ -14,6 +18,8 @@
             </div>
 
             <img src="@/assets/svg/next.svg" class="next" @click="nextsong">
+            <img src="@/assets/svg/next.svg" class="next" @click="nextsong">
+
 
         </div>
 
@@ -29,7 +35,9 @@
 
         data(){
             return{
-                percentageData:0
+                percentageData:0,
+                switchPlayStatusIcon:[require("@/assets/svg/linearplay.svg"),require("@/assets/svg/roundplay.svg"),require("@/assets/svg/randomplay.svg")]
+
             }
 
         },
@@ -41,7 +49,10 @@
 
         },
         computed:{
-            ...mapState(['songList','nowIndex','pauseorstartstatus']),
+            ...mapState(['songList','nowIndex','pauseorstartstatus','playStatusArray','nowPlayStatusIndex']),
+            statusIcon(){
+                return this.switchPlayStatusIcon[this.nowPlayStatusIndex]
+            },
             icon(){
                 return this.pauseorstartstatus?require("@/assets/svg/pause.svg"):require("@/assets/svg/start.svg")
             },
@@ -53,6 +64,15 @@
 
 
         methods:{
+            changePlayTime:function(e){
+                // here we are intended to compute the percentage of the sliding bar
+                this.percentageData=((e.clientX-this.$refs.progressBar.offsetLeft)/this.$refs.progressBar.offsetWidth).toFixed(2);
+                // this.$store.commit("changeCurrentTime",this.percentageData*this.toSecond());
+                //here we are intended to relocate the time the audio should play when account change its state.
+                this.$store.commit("changeIsMoving",this.percentageData*this.toSecond())
+
+                console.log(this.$store.state.isMoving);
+            },
             presong:function(){
                 this.$emit("presong")
             },
@@ -63,16 +83,19 @@
                 this.$emit("pauseorstart")
 
             },
-            percentage:function(val){
+            toSecond:function(){
                 const duration=this.songList[this.nowIndex].length.split(":")
                 let minute=parseInt(duration[0])
-                let second=parseInt(duration[1])
+                let second=parseInt(duration[1]);
                 let temp=minute*60+second;
-                // console.log(temp)
-                return Math.floor(val*100/temp)
-
-
-
+                return temp;
+            },
+            percentage:function(val){
+                let temp=this.toSecond(val);
+                return Math.floor(val*100/temp);
+            },
+            playStatusHandler:function(){
+                this.$store.commit('nowPlayStatusIndexChange');
 
             }
         },
@@ -84,7 +107,9 @@
                 this.percentageData=this.percentage(this.$store.state.currentTime)
                 // console.log(this.percentageData)
 
-            }
+            },
+
+
         }
     }
 </script>
@@ -98,26 +123,51 @@
 
     }
     .control{
-        margin-top:10vw;
+        /*margin-top:8vw;*/
         display:flex;
-        justify-content: center;
-        margin-left:50vw;
-        transform:translateX(-50%);
-        border:1px solid red;
+        align-items:center;
+        justify-content: space-around;
+        /*margin-left:50vw;*/
+        /*transform:translateX(-50%);*/
+        margin:8vw auto;
+        /*flex布局似乎不能这么指定margin 0 auto去水平居中，因为水平高度没定*/
+        /*border:1px solid red;*/
+        background: white;
+        border-radius:3vw 3vw;
+        width:70%;
+        height:6vh;
+
+
+
 
     }
+    .control>.control-status{
+
+        text-align:center;
+        position:relative;
+        height:100%;
+
+    }
+    .control>.control-status>img{
+        /*margin-top:50%;*/
+        text-align:center;
+        margin-top:3vh;
+        transform:translateY(-50%);
+
+    }
+
     .progress-bar{
         width:90vw;
         margin:0 auto;
         height:1.2vh;
         border-radius:4vw;
         background-color:lightgray;
-        position:relative;
+        /*position:relative;*/
     }
 
     .progress-bar div{
         display:inline-block;
-        width:50%;
+        /*width:50%;*/
         height:100%;
         border-radius:4vw;
         background-color:cornflowerblue;
@@ -142,10 +192,16 @@
 
     .before{
         transform:rotate(180deg);
-        margin-right:5vw;
+
+
+
+
     }
     .next{
-        margin-left:5vw;
+
+
+
+
     }
 
     .pause{

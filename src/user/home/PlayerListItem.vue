@@ -25,6 +25,7 @@
                     path: "/player",
 
                 })
+                console.log(this.$route);
 
             }
         },

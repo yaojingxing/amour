@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import  {State} from './audiocontrol/index'
+import mod1 from './usercontrol'
+import {name} from './searchcontrol'
 
+console.log(name)
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
+  state:{
     songList:[
       {cover:"https://albumcover.s3.us-east-2.amazonaws.com/jay.jpg",songname:"一路向北",
         author:"周杰伦",length:"05:01",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E4%B8%80%E8%B7%AF%E5%90%91%E5%8C%97.mp3"},
@@ -13,14 +17,14 @@ export default new Vuex.Store({
       {cover:"https://albumcover.s3.us-east-2.amazonaws.com/jay.jpg",songname:"给我一首歌的时间",
         author:"周杰伦",length:"04:14",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E7%BB%99%E6%88%91%E4%B8%80%E9%A6%96%E6%AD%8C%E7%9A%84%E6%97%B6%E9%97%B4.mp3"},
 
-        {cover:"https://albumcover.s3.us-east-2.amazonaws.com/jay.jpg",songname:"说好不哭",
-      author:"周杰伦",length:"05:21",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E8%AF%B4%E5%A5%BD%E4%B8%8D%E5%93%AD.mp3"},
+      {cover:"https://albumcover.s3.us-east-2.amazonaws.com/jay.jpg",songname:"说好不哭",
+        author:"周杰伦",length:"05:21",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E8%AF%B4%E5%A5%BD%E4%B8%8D%E5%93%AD.mp3"},
       {
         cover:"https://albumcover.s3.us-east-2.amazonaws.com/fantasy.jpg",songname:"爱在西元前",
         author:"周杰伦",length:"03:51",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E7%88%B1%E5%9C%A8%E8%A5%BF%E5%85%83%E5%89%8D.mp3"
       },
       {cover:"https://albumcover.s3.us-east-2.amazonaws.com/yehuimei.jpg",songname:"晴天",
-      author:"周杰伦",length:"05:19",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E6%99%B4%E5%A4%A9.mp3"},
+        author:"周杰伦",length:"05:19",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E6%99%B4%E5%A4%A9.mp3"},
       {
         cover:"https://albumcover.s3.us-east-2.amazonaws.com/stillfantasy.jpg",songname:"白色风车",
         author:"周杰伦",length:"04:52",song:"https://sheshe.s3.us-east-2.amazonaws.com/%E7%99%BD%E8%89%B2%E9%A3%8E%E8%BD%A6.mp3"
@@ -68,39 +72,51 @@ export default new Vuex.Store({
 
 
 
-      ],
+    ],
 
     nowIndex:0,
     pauseorstartstatus:false,
-    currentTime:0
+    currentTime:0,
+    playStatusArray:["linear","round","random"],
+    nowPlayStatusIndex:0,
+    isMoving:0
   },
 
   getters:{
-    duration:function(state){
+    duration:function(state:State){
       const duration0=state.songList[state.nowIndex].length.split(":")
       let minute=parseInt(duration0[0])
       let second=parseInt(duration0[1])
       return minute*60+second;
     },
-    percentage:function(state){
+    percentage:function(state:State){
       const duration=state.songList[state.nowIndex].length.split(":")
       let minute=parseInt(duration[0])
       let second=parseInt(duration[1])
       let temp=minute*60+second;
-      // console.log(temp)
+      // console.log(temp)j
       return Math.floor(state.currentTime*100/temp)
     }
 
   },
   mutations: {
-    fresh(state){
+    changeIsMoving(state:State,payload:any){
+      state.isMoving=payload;
+    },
+    nowPlayStatusIndexChange(state:State){
+      state.nowPlayStatusIndex=(state.nowPlayStatusIndex+1)%3;
+    },
+    fresh(state:State){
       state.pauseorstartstatus=true;
       state.currentTime=0;
     },
-    changeCurrentTime(state,payload){
+    changeCurrentTime(state:State,payload:any){
       state.currentTime=payload;
     },
-    toggle(state){
+    randomSong(state:State){
+      state.nowIndex=Math.floor(state.songList.length*Math.random());
+    },
+    toggle(state:State){
       if(state.pauseorstartstatus){
         state.pauseorstartstatus=false
       }
@@ -108,17 +124,17 @@ export default new Vuex.Store({
         state.pauseorstartstatus=true
       }
     },
-    next(state){
+    next(state:State){
       if (state.nowIndex<state.songList.length-1){
         state.nowIndex++;
       }
       else{
-      state.nowIndex=0;}
+        state.nowIndex=0;}
     },
-    jump(state,val){
+    jump(state:State,val:any){
       state.nowIndex=val
     },
-    previous(state){
+    previous(state:State){
       if(state.nowIndex>0){
         state.nowIndex--
       }
@@ -131,5 +147,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
+    mod1
   }
 })

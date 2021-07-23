@@ -5,8 +5,8 @@
 
             <div class="slider" :style="{width:sliderWidth}">
 
-                <div v-for="(item,index) in albumCoverlists" :key="item" >
-                    <img alt="album" :src="item">
+                <div v-for="(item,index) in albumCoverlists" :key="item" @click="sliderItemClick">
+                    <img alt="album" :src="item" >
                 </div>
             </div>
         </div>
@@ -23,8 +23,14 @@
                 return this.albumCoverlists.length*40+10+"vw"
             }
         },
+        methods:{
+            sliderItemClick:function(){
+                this.$router.push('/album')
+            }
+        },
 
         props:{
+
             albumCoverlists:{
                 type:Array,
                 default(){

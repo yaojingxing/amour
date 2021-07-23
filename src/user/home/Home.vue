@@ -15,6 +15,9 @@
 
 
 
+
+
+
     </div>
 </template>
 
@@ -23,15 +26,20 @@
     // import NavBar from "@/components/NavBar";
     import PlayerList from "@/user/home/PlayerList";
     import NavBar from "@/components/NavBar";
+
+
     export default {
         name: "Home",
         components:{
+
             NavBar,
             Slider,
             PlayerList
         },
         mounted(){
             window.scrollTo(0,0)
+
+
         },
 
 

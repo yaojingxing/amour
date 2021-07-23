@@ -1,7 +1,7 @@
 <template>
     <audio ref="songtrack" @ended="end" @timeupdate="timeUpdate" preload="auto">
 
-        <source  :src="this.songList[this.nowIndex].song"  type="audio/mp3" />
+        <source  :src="songList[this.nowIndex].song"  type="audio/mp3" />
 
         Your browser does not support this audio format.
     </audio>
@@ -14,15 +14,17 @@
     export default {
         name: "Audio",
         computed:{
-            ...mapState(['songList','nowIndex','pauseorstartstatus'])
+            ...mapState(['songList','nowIndex','pauseorstartstatus','nowPlayStatusIndex'])
 
         },
 
         mounted(){
-            this.audio=this.$refs.songtrack
+            this.audio=this.$refs.songtrack;
+            console.log(this.$refs);
 
             console.log(this.songList[this.nowIndex].song)
             console.log(this.ended)
+            console.log(this.$store.state.mod1.isSigned)
 
             // this.audio.play()
         },
@@ -35,7 +37,20 @@
         },
         methods:{
             end:function(){
-                this.$store.commit('next')
+                if(this.nowPlayStatusIndex==0){
+                    this.$store.commit('next')
+                }
+                else if(this.nowPlayStatusIndex==1){
+                    this.$store.commit('fresh')
+                    this.audio.src=this.songList[this.nowIndex].song
+                    this.audio.play()
+                }
+                else if(this.nowPlayStatusIndex==2){
+                    this.$store.commit("randomSong");
+
+                }
+
+
 
             },
             timeUpdate(){
@@ -54,6 +69,11 @@
 
             }, deep:true},
 
+            '$store.state.isMoving':function(a){
+                    this.audio.currentTime=a;
+                    console.log("frog")
+            },
+
             '$store.state.pauseorstartstatus':function(a){
                 console.log(1)
 
@@ -65,7 +85,9 @@
                 }
 
 
-            }
+            },
+
+
         }
     }
 </script>

@@ -63,6 +63,7 @@
         },
         mounted(){
            window.scrollTo(0,0)
+            console.log(this)
         },
         // mounted(){
         //     this.$store.commit('fresh')
@@ -81,6 +82,7 @@
         methods:{
             backToHome:function(){
                 this.$router.push("/home")
+
             },
             presong(){
                 // const audio=this.$refs.songtrack;
