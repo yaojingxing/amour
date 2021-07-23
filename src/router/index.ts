@@ -2,8 +2,9 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../user/home/Home.vue'
 import Player from '../user/player/Player.vue'
-import User from "../user/user/User.vue"
+import User from "../user/account/Account.vue"
 import Search from "../user/search/Search.vue"
+import Album from "@/user/album/Album.vue"
 
 Vue.use(VueRouter)
 
@@ -17,12 +18,18 @@ const routes: Array<RouteConfig> = [
     name:'Search',
     component:Search
   },
+  {
+    path:'/album',
+    name:'Album',
+    component:Album
+  },
 
   {
-    path:'/user',
+    path:'/account',
     name:'User',
     component:User
   },
+
 
 
   {
@@ -41,7 +48,7 @@ const routes: Array<RouteConfig> = [
   //   // route level code-splitting
   //   // this generates a separate chunk (about.[hash].js) for this route
   //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../user/About.vue')
+  //   component: () => import(/* webpackChunkName: "about" */ '../account/About.vue')
   // }
 ]
 

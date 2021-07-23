@@ -5,7 +5,9 @@
 <!--      </keep-alive>-->
       <Audio></Audio>
 
-      <tab-bar></tab-bar>
+
+
+      <tab-bar v-if="$route.name!=='Player'"></tab-bar>
 
 
 
@@ -15,7 +17,7 @@
 
 <script>
   import Home from "@/user/home/Home";
-  // import Audio from "@/user/audio/Audio"
+  // import Audio from "@/account/audio/Audio"
   import Audio from "@/user/audio/Audio";
   import TabBar from "@/components/TabBar";
 

@@ -67,6 +67,11 @@
 </script>
 
 <style scoped>
+
+    h3{
+        margin-top:2vh;
+        margin-bottom:2vh;
+    }
     .PlayerList{
         margin-left:7vw;
         position:relative;

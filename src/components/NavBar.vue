@@ -23,7 +23,8 @@
          left:0;
          /*background-color:white;*/
          z-index:1000;
-         background-color:#1296db;
+         background-color:white;
+         border-bottom:2px solid black;
 
 
 

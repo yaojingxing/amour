@@ -17,7 +17,7 @@
                 notationStaticWord:[require("../assets/svg/home.svg"),require("@/assets/svg/search.svg"),require("@/assets/svg/music.svg"),require("@/assets/svg/user.svg")],
 
 
-                path:['/home','/search','/player','/user'],
+                path:['/home','/search','/player','/account'],
                 nowActive:0,
                 notationActiveList:[require("../assets/svg/homeactive.svg"),require("../assets/svg/homeactive.svg"),require("../assets/svg/musicactive.svg"),require("../assets/svg/useractive.svg")]
             }
@@ -52,13 +52,15 @@
 <style scoped>
     .tab-bar{
         height:10vh;
-        width:100vw;
+        /*width:100vw;*/
+        width:100%;
         position:fixed;
         display:flex;
-
+        background-color:white;
         bottom:0;
         left:0;
-        /*border-top:1px solid ;*/
+        border-top:2px solid black;
+
         box-shadow:0 -5px 10px lightgray;
     }
 
